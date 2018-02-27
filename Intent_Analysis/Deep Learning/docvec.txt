@@ -1,0 +1,6 @@
+Approaches :
+1.)Vector Averging
+2.) tf_idf 
+3.) One simple technique that seems to work reasonably well for short texts (e.g., a sentence or a tweet) is to compute the vector for each word in the document, and then aggregate them using the coordinate-wise mean, min, or max. Based on results in one recent paper, it seems that using the min and the max works reasonably well. It's not optimal, but it's simple and about as good or better as other simple techniques. In particular, if the vectors for the nn words in the document are v1,v2,…,vn∈ℝdv1,v2,…,vn∈Rd, then you compute min(v1,…,vn)min(v1,…,vn) and max(v1,…,vn)max(v1,…,vn). Here we're taking the coordinate-wise minimum, i.e., the minimum is a vector uu such that ui=min(v1i,…,vni)ui=min(vi1,…,vin), and similarly for the max. The feature vector is the concatenation of these two vectors, so we obtain a feature vector in ℝ2dR2d. I don't know if this is better or worse than a bag-of-words representation, but for short documents I suspect it might perform better than bag-of-words, and it allows using pre-trained word embeddings.TL;DR: Surprisingly, the concatenation of the min and max works reasonably well.
+
+4.) Document Similarity With Word Movers Distance

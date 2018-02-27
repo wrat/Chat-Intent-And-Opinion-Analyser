@@ -1,0 +1,5 @@
+from typical_preprocess import preprocess
+def get_opinion(lexicon,chat_string)
+	
+
+def split_opinion

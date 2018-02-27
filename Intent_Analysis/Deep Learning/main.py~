@@ -1,0 +1,9 @@
+#from intent import get_intent,get_centroid
+#from find_entities import find_similar_words
+import json
+def main():
+	with open("intent.json") as d:
+		data = json.load(d)
+		print(data['data'])
+
+main()

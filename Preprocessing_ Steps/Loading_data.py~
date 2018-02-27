@@ -1,0 +1,201 @@
+import nltk
+import os
+from os import listdir
+from os.path import isfile, join
+from nltk.tokenize import sent_tokenize, word_tokenize
+import re
+import pickle
+from nltk.corpus import nps_chat
+from statistics import mean
+from nltk.stem import PorterStemmer
+from collections import OrderedDict
+import Nps_chat as chat
+import Load_word
+import Load_emotion
+#import sys
+#reload(sys)
+#sys.setdefaultencoding("utf-8")
+words_list = []
+Positive_words_list  = []
+Negative_words_list = []
+Neutral_words_list  = []
+Chat_data = []
+Positive_emotion = []
+Negative_emotion = []
+Neutral_emotion  = []
+Emotion = []
+
+#chat.get_raw_converstion()
+pos_tag_allowed = ["J","R","V"]
+
+def Idioms_detection(raw_string):
+        string = raw_string.split('"')
+        if(len(string) is 1):
+            return raw_string
+
+        search_object = string[1]
+        raw_list = search_object.split(' ')
+        combined_idiom = ''
+        for i in raw_list:
+             combined_idiom = combined_idiom + '_'+ i
+        raw_string = string[0] + ''
+
+        for i in string[1:]:
+            if(i is search_object):
+                raw_string = raw_string + ' ' + combined_idiom
+            else:
+                raw_string = raw_string + ' '+ i
+
+        return raw_string
+
+def check_repetition(word):
+    return "".join(OrderedDict.fromkeys(word))
+
+def Removing_repetitive_letters_and_stemming(word):
+    ps = PorterStemmer()
+    #word = ps.stem(word)
+    #word = check_repetition(word)
+    return word
+
+def preprocessing_sentence_sentiment(tokens_list):
+    score = []
+    pos = nltk.pos_tag(tokens_list)
+    for w in pos:
+        if w[1][0] in pos_tag_allowed:
+            word = Removing_repetitive_letters_and_stemming(w[0])
+            if(word in Positive_words_list):
+                score.append(1)
+            elif(word in Negative_words_list):
+                 score.append(-1)
+            else:
+                score.append(0)
+                Neutral_words_list.append(word)
+    if(len(score) is 0):
+        return 0
+    return mean(score)
+
+
+
+def detect_emotion(sentence):
+    word_list = sentence.split(' ')
+    emotion = []
+    for word in word_list:
+        word  = (word.split('.'))[0]
+        if word in list(Positive_emotion):
+            emotion.append(1)
+        elif word in list(Negative_emotion):
+            emotion.append(-1)
+        elif word in list(Neutral_emotion):
+            emotion.append(0)
+    if(len(emotion) >= 1):
+       return mean(emotion)
+    else:
+      return -2
+#def Apply_Negation_tag(sentence):
+
+def sentiment_lexicon(string):
+        new_sentence_lists = []
+        tokens_list = []
+        final_tokens_list = []
+        emotion_detected = []
+        new_string = string.lower()
+        try:
+            sentence_tokenize = (sent_tokenize(new_string))
+
+            for sentence in sentence_tokenize:
+              new_sentence_lists.append((Idioms_detection(sentence)))
+            
+
+            for each_sentence in new_sentence_lists:
+                emotion_value = detect_emotion(each_sentence)
+                if (emotion_value is not -2):
+                    emotion_detected.append(emotion_value)
+                    continue
+                text_word = word_tokenize(each_sentence)
+                tokens_list.append(text_word)
+
+            for tokens in tokens_list:
+                if('.' in tokens):
+                    tokens.remove('.')
+                final_tokens_list = final_tokens_list + tokens
+
+            if(len(emotion_detected) >= 1 ):
+              Polarity_value = preprocessing_sentence_sentiment(final_tokens_list) + mean(emotion_detected)
+              Chat_data.append((Polarity_value , string))
+
+            else:
+                  Polarity_value = preprocessing_sentence_sentiment(final_tokens_list)
+                  Chat_data.append((Polarity_value , string))
+
+            #return mode(sentence_sentiment)
+        except Exception as e:
+            pass
+
+
+def check_for_emotion(string):
+     for emo in Emotion:
+         match = re.search( emo  , string)
+         if(match):
+             print(match.group())
+
+
+
+Positive_words_list , Negative_words_list = Load_word.load_word_list()
+Positive_emotion , Negative_emotion,Neutral_emotion,Emotion = Load_emotion.load_emotion()
+
+def lexicon_sentiment(chat):
+    data = sentiment_lexicon(chat)
+    print(data)
+
+def fetch_file_name(directory_name):
+    mypath = directory_name
+    onlyfiles = [f for f in listdir(mypath) if isfile(join(mypath, f))]
+    return onlyfiles
+
+if __name__ == "__main__":
+	#def classify_emotion_of_chat(Directory_name):
+	#word_list_processing()
+	#chat_file = open('chat_data.txt','r+')
+
+	directory = 'chat_data'
+	list_of_file = fetch_file_name(directory)
+	pos = open('chat_data/neutral_chat0.txt','r+')
+	positive_chat_list = []
+	for chats in pos:
+	    positive_chat_list.append(chats)
+
+	new_positive_file = open('new_neutral_chat.txt','w+')
+	for i in range(1,10):
+	    pos = open('chat_data/neutral_chat' + str(i) +'.txt','r+')
+	    for chat in pos:
+		if(chat not in positive_chat_list):
+		    positive_chat_list.append(chat)
+
+	for chats in positive_chat_list:
+	    new_positive_file.write(chats)
+
+	##counter = 0
+	##directory1 = 'chat_data'
+	##for files in list_of_file:
+	    ##file_name = directory + '/' + files
+	    ##file  = open(file_name,'r+')
+	    ##for chats in file:
+	    #chats = unicode(chats, errors='replace')
+	      ##sentiment_lexicon(chats)
+	    ###print(len(Chat_data))
+	    ##pos = open(directory1+'/positive_chat' + str(counter) + '.txt','w+')
+	    ##neg = open(directory1+'/negative_chat' + str(counter) + '.txt','w+')
+	    ##neu = open(directory1+'/neutral_chat' + str(counter) + '.txt','w+')
+	    ##for chat_sentiment in Chat_data:
+		##if (chat_sentiment[0] > 0):
+		    ##pos.write(chat_sentiment[1])
+		    ##print(pos)
+		##if(chat_sentiment[0] < 0 ):
+		    ##neg.write(chat_sentiment[1])
+		    ##print('neg')
+		##else:
+		    ##neu.write(chat_sentiment[1])
+		    ##print('neu')
+	    ##counter = counter + 1
+	    ##Chat_data = []
+	#sentiment_lexicon(chats)

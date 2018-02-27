@@ -1,0 +1,45 @@
+import numpy as np
+from load_embeddings import Embedding
+import json
+def load_intent_data(file_location):
+	with open(file_location) as d:
+		vec_data = (json.load(d))
+		return vec_data
+
+vec_data = load_intent_data("/home/abhishek/Facebook_data/CIO/Intent_Analysis/Deep Learning/intent.json")
+
+def sum_vecs(embed,text):
+    tokens = text.split(' ')
+    vec = np.zeros(embed.W.shape[1])
+    for idx, term in enumerate(tokens):
+        if term in embed.vocab:
+            vec = vec + embed.W[embed.vocab[term], :]
+    return vec
+
+def get_centroid(embed,examples):
+    C = np.zeros((len(examples),embed.W.shape[1]))
+    for idx, text in enumerate(examples):
+        C[idx,:] = sum_vecs(embed,text)
+    centroid = np.mean(C,axis=0)
+    assert centroid.shape[0] == embed.W.shape[1]
+    return centroid
+
+def get_intent(embed,text):
+    intents = ['deny', 'inform', 'greet','conversation','emotion','SearchProduct','inquire','issue a directive','buy']
+    vec = sum_vecs(embed,text)
+    for label in vec_data["data"].keys():
+    	vec_data["data"][label]["centroid"] = get_centroid(embed,vec_data["data"][label]["examples"])
+    scores = np.array([np.linalg.norm(vec - vec_data["data"][label]["centroid"]) for label in intents ])
+    return intents[np.argmin(scores)]
+
+def get_result(embed,text):
+	cuisine_refs = ["mexican","chinese","french","british","american"]
+	threshold = 0.2
+	#cuisines = find_similar_words(embed,cuisine_refs,text,threshold)
+	return get_intent(embed,text)
+
+#text = "I want to find an indian restaurant"
+#vocab_file = "/home/abhishek/Facebook_data/CIO/Pre_trained_Embeddings/glove_vector/twitter_vocab.txt"
+#vectors_file = "/home/abhishek/Facebook_data/CIO/Pre_trained_Embeddings/glove_vector/twitter_vector.txt"
+#embed = Embedding(vocab_file,vectors_file)
+#print(get_result(embed,text))

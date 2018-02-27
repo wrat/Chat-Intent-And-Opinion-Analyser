@@ -1,0 +1,11 @@
+import shelve
+slang = open("slang_dict.txt","r")
+slang_db = shelve.open("slang.db","w")
+
+for line in slang:
+	line = line.replace('\r','')
+	line = line.replace('\n','')
+	item = line.split('`')
+	if(len(item) > 1):
+		#slang_file.write(item[0].lower()+' '+item[1].lower()+'\n')
+		slang_db[item[0].lower()] = item[1].lower()

@@ -1,0 +1,4 @@
+import shelve
+
+def build_lexicon():
+	

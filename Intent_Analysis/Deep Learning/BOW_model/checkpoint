@@ -1,0 +1,2 @@
+model_checkpoint_path: "/home/abhishek/Facebook_data/CIO/Intent_Analysis/Deep Learning/model.tflearn"
+all_model_checkpoint_paths: "/home/abhishek/Facebook_data/CIO/Intent_Analysis/Deep Learning/model.tflearn"

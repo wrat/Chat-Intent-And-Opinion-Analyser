@@ -1,0 +1,93 @@
+{
+"data" : {
+  "greet": {
+    "examples" : ["hello","hey there","howdy","hello","hi","hey","hey ho","Hi, How is it going?","How are you doing?","Nice to meet you","How do you do?","Hi, nice to meet you","It is a pleasure to meet you","Top of the morning to you!","What's up?"],
+    "centroid" : "None"
+  },
+  "inform": {
+    "examples" : [
+      "i'd like something asian",
+      "maybe korean",
+      "what mexican options do i have",
+      "what italian options do i have",
+      "i want korean food",
+      "i want german food",
+      "i want vegetarian food",
+      "i would like chinese food",
+      "i would like indian food",
+      "what japanese options do i have",
+      "korean please",
+      "what about indian",
+      "i want some vegan food",
+      "maybe thai",
+      "i'd like something vegetarian",
+      "show me french restaurants",
+      "show me a cool malaysian spot"
+    ],
+    "centroid" : "None"
+  },
+
+  "bye" : {
+	"examples" : ["Bye", "See you later", "Goodbye"],
+        "centroid" : "None"
+   },
+
+  "deny": {
+    "examples" : [
+      "nah",
+      "any other places ?",
+      "anything else",
+      "no thanks",
+      "not that one",
+      "i do not like that place",
+      "something else please",
+      "no please show other options"
+    ],
+    "centroid" : "None"
+  },
+
+  "seeking help" : {
+	"examples" : []	,
+        "centroid" : "None"
+	},
+
+  "offering help" : {
+	"examples" : [],
+        "centroid" :"None"
+	},
+
+   "appointment" : {	
+          "examples" : [],
+          "centroid" : "None"
+	},
+   "conversation" : {
+       "examples" : ["Good morning, how are you?","Hello","Have you heard the news?","What is your favorite book?","Who are you?","I am working on a project","Complex is better than complicated","Are you a programmer?","Can I ask you a question?","What are your hobbies?"],
+        "centroid" : "None"  
+   },
+    "emotion" : {
+         "examples" : ["You are arrogant","You are bragging","You are never sad","You are jealous","You are never nice","You will be happy","You should be ashamed","You can not feel","You can not experience","Have you felt","Have you ever love","Does that make you","Does it make you sad","Feelings","What is your fear","What is your mood","What makes you sad","What makes you unhappy","What makes you mad","What do you worry","What do you hate"],
+        "centroid" : "None"  
+      },
+    "search" : {"examples" : ["Find me a pair of Size 8 Red Adidas Sport shoes."],"centroid" : "None"},
+    "complaint" : {
+          "examples" : [],
+          "centroid" : "None"
+    },	
+    "suggestion" : {
+          "examples" : [],
+          "centroid" : "None"
+    },
+    "inquire" : {
+       "examples":["Is the Canon EOS 5 a good camera?"],
+       "centroid":"None"
+    },
+    "issue a directive" : {
+        "examples":["Take me to a good movie"],
+        "centroid":"None"
+    },
+    "buy" : {
+          "examples":["I am looking to buy me a good Canon camera"],
+          "centroid":"None"
+    }
+ }
+}
